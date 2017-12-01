@@ -27,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // TEMPORAIRE, à remplacer avec AsyncTask
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+        /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll()
                 .build();
-        StrictMode.setThreadPolicy(policy);
+        StrictMode.setThreadPolicy(policy)*/
         // FIN TEMPORAIRE
 
         final ArrayList<Film> films = new ArrayList<>();
