@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import com.orm.SugarContext;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //this.deleteDatabase("films_database.db");
+        SugarContext.init(this);
+
         // TEMPORAIRE, à remplacer avec AsyncTask
         /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll()
@@ -33,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy)*/
         // FIN TEMPORAIRE
 
-        final ArrayList<Film> films = new ArrayList<>();
+        //final ArrayList<Film> films = new ArrayList<>();
+        final List<Film> films = Film.listAll(Film.class);
         adapter = new CustomAdapter(this, films);
 
         ListView lv = findViewById(R.id.listview);
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 i++;
                 Film tmp = new Film(null, "Film "+i, new Date(), "Producteur "+i);
                 films.add(tmp);
+                tmp.save();
                 adapter.notifyDataSetChanged();
             }
         });

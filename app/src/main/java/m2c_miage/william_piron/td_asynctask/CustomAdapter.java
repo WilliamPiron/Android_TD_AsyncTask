@@ -1,6 +1,8 @@
 package m2c_miage.william_piron.td_asynctask;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -23,7 +27,7 @@ import java.util.Locale;
  */
 
 public class CustomAdapter extends ArrayAdapter<Film> {
-    CustomAdapter(@NonNull Context context, ArrayList<Film> films) {
+    CustomAdapter(@NonNull Context context, List<Film> films) {
         super(context, R.layout.listview_films, films);
     }
 
@@ -61,9 +65,13 @@ public class CustomAdapter extends ArrayAdapter<Film> {
         viewHolder.title.setText(film.getTitre());
         viewHolder.date.setText(s);
         viewHolder.production.setText(film.getProduction());
-        // TEMPORAIRE
-        if (film.getImage() != null) {
-            viewHolder.image.setImageBitmap(film.getImage());
+
+        byte[] image = film.getImage();
+        if (image != null && image.length>0) {
+            //viewHolder.image.setImageBitmap(film.getImage());
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(film.getImage());
+            Bitmap bitmap = BitmapFactory.decodeStream(byteArrayInputStream);
+            viewHolder.image.setImageBitmap(bitmap);
         }
         else {
             viewHolder.image.setImageResource(R.mipmap.ic_launcher);

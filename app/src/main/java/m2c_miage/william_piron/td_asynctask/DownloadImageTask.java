@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Adapter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
@@ -20,7 +21,7 @@ import static android.content.ContentValues.TAG;
  */
 
 
-class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
+class DownloadImageTask extends AsyncTask<String, Void, Void>{
 
     private WeakReference<Activity> activity;
     private WeakReference<CustomAdapter> adapter;
@@ -42,25 +43,39 @@ class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
     }
 
     @Override
-    protected Bitmap doInBackground(String... urls) {
+    protected Void doInBackground(String... urls) {
         URL url = null;
         try {
             url = new URL(urls[0]);
-            return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            //return BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            Bitmap tmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            ByteArrayOutputStream res = new ByteArrayOutputStream();
+            tmp.compress(Bitmap.CompressFormat.PNG, 100, res);
+            Film f = film.get();
+            if (f != null){
+                f.setImage(res.toByteArray());
+                f.save();
+            }
+            return null;
         }catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    protected void onPostExecute(Bitmap image) {
-        Activity act = activity.get();
+    protected void onPostExecute(Void aVoid) {
+        //Activity act = activity.get();
         CustomAdapter ada = adapter.get();
-        Film fil = film.get();
-
+        //Film fil = film.get();
+        /*
         if (act != null && ada != null && fil != null){
-            fil.setImage(image);
+            //fil.setImage(image);
+            ada.notifyDataSetChanged();
+        }*/
+        if (ada != null){
+            //fil.setImage(image);
             ada.notifyDataSetChanged();
         }
     }
 }
+
